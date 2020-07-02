@@ -1,29 +1,63 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <div class="container">
+    <p v-for="(principle, index) in principles" :key="index">
+      <transition name="slide-fade">
+        <SliderItem v-show="index === curIndex" :content="principle.content" />
+      </transition>
+    </p>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import HelloWorld from "./components/HelloWorld.vue";
+import { State } from "vuex-class";
+import { Principle } from "./store/models";
+import SliderItem from "./components/SliderItem.vue";
 
 @Component({
   components: {
-    HelloWorld
+    SliderItem
   }
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  @State principles!: Principle[];
+  curIndex = 0;
+
+  created() {
+    this.$store.dispatch("getPrinciples");
+    setInterval(() => {
+      this.curIndex = (this.curIndex + 1) % 12;
+    }, 3000);
+  }
+}
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+body {
+  margin: 0;
+  padding: 0;
+}
+.container {
+  display: flex;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0 20px;
+  width: 100%;
+  height: 100vh;
+  background: green;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0s;
+}
+.slide-fade-enter {
+  transform: translateX(50px);
+  opacity: 0;
 }
 </style>

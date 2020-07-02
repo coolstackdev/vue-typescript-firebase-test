@@ -1,8 +1,9 @@
-// https://docs.cypress.io/api/introduction/api.html
+describe("Agile principles", () => {
+  it("number of principles should be 12", () => {
+    cy.visit("http://localhost:8080/");
 
-describe("My First Test", () => {
-  it("Visits the app root url", () => {
-    cy.visit("/");
-    cy.contains("h1", "Welcome to Your Vue.js + TypeScript App");
+    cy.get(".item-body")
+      .its("length")
+      .should("be.eq", 12);
   });
 });
